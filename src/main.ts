@@ -18,10 +18,7 @@ async function bootstrap() {
 
     // CORS para producción + local
     app.enableCors({
-        origin: [
-        'https://admin-panel.vercel.app',
-        'http://localhost:3000',
-        ],
+        origin: true,   // Permitir swagger cargar sus JS y CSS
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         credentials: true,
     });
@@ -38,7 +35,7 @@ async function bootstrap() {
         .build();
 
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('docs', app, document);
+    SwaggerModule.setup('api/docs', app, document);
 
     // Forzar inicialización de Prisma
     const prismaService = app.get(PrismaService);
