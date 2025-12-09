@@ -1,0 +1,131 @@
+// ---------------------------------------------
+// GENERATOR & DATASOURCE
+// ---------------------------------------------
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------
+// USUARIO
+// ---------------------------------------------
+model User {
+  id        String  @id @default(uuid())
+  nombre    String
+  email     String  @unique
+  tel       String?
+  direccion String?
+  password  String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  orders Order[]
+}
+
+// ---------------------------------------------
+// CATEGORÍA 
+// ---------------------------------------------
+model Category {
+  id        String   @id @default(uuid())
+  nombre    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  products  Product[]
+}
+
+// ---------------------------------------------
+// PRODUCTO
+// ---------------------------------------------
+model Product {
+  id          String         @id @default(uuid())
+  nombre      String
+  descripcion String?
+  genero      Genero
+  marca       String
+  precio      Float
+  imagenes    String[]       @default([]) // ARRAY obligatorio (vacío por defecto)
+  stock       Int            @default(0)
+  estado      EstadoProducto @default(ACTIVO)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  orderItems OrderItem[]
+}
+
+enum Genero {
+  NINO
+  HOMBRE
+  MUJER
+}
+
+enum EstadoProducto {
+  ACTIVO
+  INACTIVO
+}
+
+// ---------------------------------------------
+// ORDEN / VENTA
+// ---------------------------------------------
+model Order {
+  id            String      @id @default(uuid())
+  numeroOrden   Int         @default(autoincrement())
+  estado        EstadoOrden @default(PREPARACION)
+  numeroFactura String      @default("SIN_FACTURA")
+  total         Float       @default(0)
+  pago          EstadoPago  @default(PENDIENTE)
+  date          DateTime    @default(now())
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  items OrderItem[]
+}
+
+enum EstadoOrden {
+  CANCELADO
+  PREPARACION
+  ENVIADO
+}
+
+enum EstadoPago {
+  PAGADO
+  FALLIDO
+  PENDIENTE
+}
+
+// ---------------------------------------------
+// ITEMS DE LA ORDEN
+// ---------------------------------------------
+model OrderItem {
+  id String @id @default(uuid())
+
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  quantity Int
+  price    Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
