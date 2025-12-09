@@ -64,13 +64,13 @@ export class AuthService {
         const payload = { sub: user.id, email: user.email };
         const token = this.jwtService.sign(payload);
 
+        // ← CAMBIO CLAVE: usar "access_token" en lugar de "token"
         return {
-            message: 'Login exitoso',
-            token,
+            access_token: token,   // ← Aquí está la corrección
             user: {
-                    id: user.id,
-                    email: user.email,
-                    nombre: user.nombre,
+                id: user.id,
+                email: user.email,
+                nombre: user.nombre,
             },
         };
     }
