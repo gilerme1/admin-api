@@ -1,13 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Controller, Get, Body, Patch, Delete, Request } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UpdateUserDto } from './dto/user.dto';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
     constructor(private usersService: UsersService) {}
 
     @Get('me')
+    @ApiOperation({ summary: 'Obtener los datos del usuario autenticado' })
+    @ApiResponse({ status: 200 })
     findMe() {
         return {
             id: 1,
@@ -16,18 +18,9 @@ export class UsersController {
         };
     }
 
-
-    // @Patch('me')
-    // update(@Request() req, @Body() dto: UpdateUserDto) {
-    //     return this.usersService.update(req.user.id, dto);
-    // }
-
-    // @Delete('me')
-    // remove(@Request() req) {
-    //     return this.usersService.remove(req.user.id);
-    // }
-
     @Get()
+    @ApiOperation({ summary: 'Listar todos los usuarios' })
+    @ApiResponse({ status: 200, description: 'Lista completa de usuarios.' })
     findAll() {
         return this.usersService.findAll();
     }
