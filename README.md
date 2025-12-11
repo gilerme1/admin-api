@@ -94,7 +94,7 @@ JWT_SECRET="tu_secreto_super_seguro_aqui"
 JWT_EXPIRES_IN="2h"
 
 # Server
-PORT=3000
+PORT=3001
 ```
 
 **Configurar Prisma:**
@@ -125,8 +125,6 @@ npm run start:prod
 # Testing
 npm run test
 ```
-
-La API estará disponible en `http://localhost:3000/api`
 
 ---
 
@@ -162,6 +160,10 @@ src/
 ---
 
 ## 🔌 Endpoints API
+
+### **Swagger y Documentación**
+
+- Accede a la documentación interactiva en [`/api/docs`](http://localhost:3001/api/docs)
 
 ### **Autenticación**
 

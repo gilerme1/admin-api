@@ -1,7 +1,7 @@
 import {
-  Injectable,
-  BadRequestException,
-  NotFoundException,
+    Injectable,
+    BadRequestException,
+    NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
@@ -61,7 +61,6 @@ export class SalesService {
         }
         }
 
-        // 4. Calcular total de forma simple (sin comparaciones)
         const total = dto.items.reduce(
         (acc, it) => acc + it.price * it.quantity,
         0,
@@ -102,7 +101,6 @@ export class SalesService {
             ),
         );
 
-        // Si algún updateMany no afectó filas → stock insuficiente
         if (updates.some(u => u.count === 0)) {
             throw new BadRequestException(
             'Stock insuficiente para alguno de los productos.',

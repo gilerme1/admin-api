@@ -7,7 +7,6 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    // Validación global
     app.useGlobalPipes(
         new ValidationPipe({
         whitelist: true,
@@ -16,17 +15,14 @@ async function bootstrap() {
         }),
     );
 
-    // CORS para producción + local
     app.enableCors({
-        origin: true,   // Permitir swagger cargar sus JS y CSS
+        origin: true,   
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         credentials: true,
     });
 
-    // Prefijo global
     app.setGlobalPrefix('api');
 
-    // --- Swagger ---
     const config = new DocumentBuilder()
         .setTitle('Admin API')
         .setDescription('Documentación de la API del administrador')
@@ -37,11 +33,9 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api/docs', app, document);
 
-    // Forzar inicialización de Prisma
     const prismaService = app.get(PrismaService);
     await prismaService.onModuleInit();
 
-    // Iniciar servidor
     const port = process.env.PORT || 3001;
     await app.listen(port);
 

@@ -25,7 +25,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
             } catch (err) {
             retries -= 1;
             console.error(`❌ Prisma failed to connect. Retries left: ${retries}`, err.message);
-            await new Promise(res => setTimeout(res, 5000)); // esperar 5s
+            await new Promise(res => setTimeout(res, 5000)); 
             }
         }
     }
